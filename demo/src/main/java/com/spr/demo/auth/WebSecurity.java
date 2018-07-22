@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 
 import static com.spr.demo.security.SecurityConstants.LOGIN_URL;
 import static com.spr.demo.security.SecurityConstants.SIGN_UP_URL;
+import static com.spr.demo.security.SecurityConstants.SWAGGER_UI;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
@@ -33,7 +34,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, SIGN_UP_URL,LOGIN_URL).permitAll()
+                .antMatchers(SIGN_UP_URL,LOGIN_URL,SWAGGER_UI,"/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
@@ -41,6 +42,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
+
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
